@@ -9,7 +9,7 @@
  *
  */
 
-#include "fastdds/rpc_ros_pub.h"
+#include "rpc/fastdds/rpc_ros_pub.h"
 
 #include <condition_variable>
 #include <iostream>
@@ -158,7 +158,7 @@ bool RpcRosPub::Impl::Init(const std::string& topic, int domain_id) {
         return false;
     }
 
-    std::cout << "Publisher for topic " << topic_ << " created, waiting for Subscribers.";
+    std::cout << "Publisher for topic " << topic_ << " created, waiting for Subscribers." << std::endl;
     return true;
 }
 
@@ -171,8 +171,10 @@ void RpcRosPub::Impl::Stop() {
 }
 
 void RpcRosPub::Impl::Publish(const std::shared_ptr<std::vector<uint8_t>>& item) {
-    if (listener_.matched_ == 0)
+    if (listener_.matched_ == 0) {
+        // std::cout << "no listener" << std::endl;
         return;
+    }
     {
         std::lock_guard<std::mutex> lk(queue_mtx_);
         msg_queue_.push(item);
@@ -184,7 +186,7 @@ void RpcRosPub::Impl::MsgSendThread() {
     while (running_ || !msg_queue_.empty()) {
         while (listener_.matched_ == 0 && running_) std::this_thread::sleep_for(std::chrono::milliseconds(250));
         std::unique_lock<std::mutex> queue_lk(queue_mtx_);
-        if (queue_cv_.wait_for(queue_lk, std::chrono::milliseconds(kMessageWaitTimeout),
+        if (!queue_cv_.wait_for(queue_lk, std::chrono::milliseconds(kMessageWaitTimeout),
                                [&]() { return !msg_queue_.empty(); }))
             continue;
 

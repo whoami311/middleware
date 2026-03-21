@@ -24,8 +24,15 @@ endif()
 # endif()
 
 message(STATUS "Configuring Middleware publisher/subscriber example...")
-file(GLOB DDS_HELLOWORLD_SOURCES_CXX "src/*.cxx")
+file(GLOB RPC_FASTDDS_SOURCES_CXX "src/rpc/fastdds/*.cxx")
 
-add_executable(rpc_ros_pub src/fastdds/rpc_ros_pub.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
-target_link_libraries(rpc_ros_pub fastdds fastcdr)
-target_include_directories(rpc_ros_pub PUBLIC incl)
+# set(MSG_FILE src/fastdds/ByteArrayPubSubTypes.cxx
+#              src/fastdds/ByteArrayObjectSupport.cxx)
+
+add_executable(tool_rpc_ros_pub tool/tool_rpc_ros_pub.cpp src/rpc/fastdds/rpc_ros_pub.cpp ${RPC_FASTDDS_SOURCES_CXX})
+target_link_libraries(tool_rpc_ros_pub fastdds fastcdr)
+target_include_directories(tool_rpc_ros_pub PUBLIC incl)
+
+add_executable(tool_rpc_ros_sub tool/tool_rpc_ros_sub.cpp src/rpc/fastdds/rpc_ros_sub.cpp ${RPC_FASTDDS_SOURCES_CXX})
+target_link_libraries(tool_rpc_ros_sub fastdds fastcdr)
+target_include_directories(tool_rpc_ros_sub PUBLIC incl)
