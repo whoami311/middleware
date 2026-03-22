@@ -3,6 +3,7 @@
 #include <thread>
 
 #include "rpc/fastdds/rpc_ros_pub.h"
+#include "rpc/fastdds/rpc_ros_pub_sub.h"
 
 int main() {
   rpc::RpcRosPub pub;

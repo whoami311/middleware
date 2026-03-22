@@ -28,11 +28,13 @@ file(GLOB RPC_FASTDDS_SOURCES_CXX "src/rpc/fastdds/*.cxx")
 
 # set(MSG_FILE src/fastdds/ByteArrayPubSubTypes.cxx
 #              src/fastdds/ByteArrayObjectSupport.cxx)
+set(RPC_FILE src/rpc/rpc_base.cpp
+             src/rpc/rpc_data.cpp)
 
-add_executable(tool_rpc_ros_pub tool/tool_rpc_ros_pub.cpp src/rpc/fastdds/rpc_ros_pub.cpp ${RPC_FASTDDS_SOURCES_CXX})
+add_executable(tool_rpc_ros_pub tool/tool_rpc_ros_pub.cpp src/rpc/fastdds/rpc_ros_pub.cpp ${RPC_FILE} ${RPC_FASTDDS_SOURCES_CXX})
 target_link_libraries(tool_rpc_ros_pub fastdds fastcdr)
 target_include_directories(tool_rpc_ros_pub PUBLIC incl)
 
-add_executable(tool_rpc_ros_sub tool/tool_rpc_ros_sub.cpp src/rpc/fastdds/rpc_ros_sub.cpp ${RPC_FASTDDS_SOURCES_CXX})
+add_executable(tool_rpc_ros_sub tool/tool_rpc_ros_sub.cpp src/rpc/fastdds/rpc_ros_sub.cpp ${RPC_FILE} ${RPC_FASTDDS_SOURCES_CXX})
 target_link_libraries(tool_rpc_ros_sub fastdds fastcdr)
 target_include_directories(tool_rpc_ros_sub PUBLIC incl)
